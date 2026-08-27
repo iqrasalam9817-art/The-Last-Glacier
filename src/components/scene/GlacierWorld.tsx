@@ -44,8 +44,8 @@ function fbm(x: number, z: number) {
 
 /** U-shaped valley running along Z, rising toward the head (-Z). */
 function terrainHeight(x: number, z: number) {
-  const walls = Math.min(26, Math.pow(Math.abs(x) / 5.2, 2.2));
-  const headRise = Math.max(0, (-z - 10) * 0.22);
+  const walls = Math.min(34, Math.pow(Math.max(0, Math.abs(x) - 14) / 4.6, 2.1));
+  const headRise = Math.min(16, Math.max(0, (-z - 20) * 0.14));
   const ridges = fbm(x * 0.055 + 10, z * 0.045 + 4) * (6 + walls * 0.55);
   const floor = -1.2 + Math.sin(z * 0.05) * 0.6;
   return floor + walls + headRise + ridges;
@@ -117,7 +117,7 @@ function Glacier({ extent }: { extent: number }) {
         const v = pos.getZ(i) + 0.5; // 0..1 along
         const z = head + v * len;
         const taper = 0.55 + 0.45 * Math.pow(1 - v, 0.6);
-        const width = (10 + e * 9) * taper;
+        const width = (13 + e * 8) * taper;
         const x = (u - 0.5) * 2 * width;
         const crown = Math.cos((u - 0.5) * Math.PI) * (2.4 + e * 2.2);
         const flow = Math.sin(v * 26 + u * 5) * 0.35 + fbm(x * 0.12, z * 0.09) * 1.6;
@@ -483,12 +483,12 @@ function Settlement({ stop }: { stop: number }) {
 /* ---------------------------------------------- camera */
 
 const CAM: Record<number, { pos: [number, number, number]; look: [number, number, number] }> = {
-  0: { pos: [0, 13, 78], look: [0, 10, -30] },
+  0: { pos: [0, 24, 118], look: [0, 10, -40] },
   1: { pos: [19, 10, 32], look: [19, 7, 10] },
-  2: { pos: [2, 40, 60], look: [0, 2, -18] },
-  3: { pos: [-14, 8, 46], look: [6, -1, 62] },
-  4: { pos: [0, 26, 74], look: [0, 4, -6] },
-  5: { pos: [0, 16, 96], look: [0, 14, -40] },
+  2: { pos: [4, 58, 92], look: [0, 0, -30] },
+  3: { pos: [-24, 12, 58], look: [6, -1, 74] },
+  4: { pos: [0, 34, 116], look: [0, 6, -24] },
+  5: { pos: [0, 22, 150], look: [0, 16, -60] },
 };
 
 function Rig({ act }: { act: number }) {
@@ -529,13 +529,13 @@ export function GlacierWorld() {
   return (
     <>
       <color attach="background" args={["#07131F"]} />
-      <fog attach="fog" args={["#07131F", 70, 250]} />
+      <fog attach="fog" args={["#07131F", 130, 430]} />
 
-      <ambientLight intensity={0.35} color="#8DE7F5" />
+      <ambientLight intensity={0.55} color="#8DE7F5" />
       <hemisphereLight args={["#8DE7F5", "#07131F", 0.5]} />
       <directionalLight
         position={[-60, 70, -40]}
-        intensity={1.6}
+        intensity={2.4}
         color="#dff4ff"
         castShadow
         shadow-mapSize-width={1024}
