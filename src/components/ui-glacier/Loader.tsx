@@ -5,16 +5,17 @@ export function ArchiveLoader() {
   const [gone, setGone] = useState(false);
 
   useEffect(() => {
-    let raf = 0;
-    let value = 4;
-    const tick = () => {
-      value += Math.max(0.4, (100 - value) * 0.035);
-      setProgress(Math.min(100, value));
-      if (value < 99.5) raf = requestAnimationFrame(tick);
-      else setTimeout(() => setGone(true), 420);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    const start = performance.now();
+    const duration = 2200;
+    const id = window.setInterval(() => {
+      const t = Math.min(1, (performance.now() - start) / duration);
+      setProgress(4 + 96 * (1 - Math.pow(1 - t, 2)));
+      if (t >= 1) {
+        window.clearInterval(id);
+        window.setTimeout(() => setGone(true), 500);
+      }
+    }, 60);
+    return () => window.clearInterval(id);
   }, []);
 
   if (gone) return null;
