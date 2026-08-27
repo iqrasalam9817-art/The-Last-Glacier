@@ -523,21 +523,6 @@ export function GlacierWorld() {
   const quality = useExperience((s) => s.quality);
 
   const extentTarget = TIMELINE[timeIndex]?.extent ?? 0.72;
-  const extentRef = useRef(extentTarget);
-  const [, force] = useMemo(() => [0, { v: 0 }], []) as [number, { v: number }];
-  const smooth = useRef(extentTarget);
-  const setDummy = useRef(0);
-
-  useFrame((_, delta) => {
-    const k = 1 - Math.exp(-3 * Math.min(delta, 0.05));
-    smooth.current += (extentTarget - smooth.current) * k;
-    extentRef.current = smooth.current;
-    setDummy.current += delta;
-    void force;
-  });
-
-  // Re-shaping happens inside Glacier via the extent prop; use a stepped value so
-  // geometry rebuilds are throttled to meaningful changes.
   const stepped = Math.round(extentTarget * 100) / 100;
   const snowCount = quality === "low" ? 260 : quality === "medium" ? 700 : 1400;
 
