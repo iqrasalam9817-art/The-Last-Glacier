@@ -55,7 +55,7 @@ function terrainHeight(x: number, z: number) {
 
 function Terrain() {
   const geo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(220, 260, 150, 170);
+    const g = new THREE.PlaneGeometry(220, 260, 96, 110);
     g.rotateX(-Math.PI / 2);
     const pos = g.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < pos.count; i++) {
@@ -68,7 +68,7 @@ function Terrain() {
   }, []);
 
   return (
-    <mesh geometry={geo} receiveShadow position={[0, 0, -30]}>
+    <mesh geometry={geo} position={[0, 0, -30]}>
       <meshStandardMaterial color="#122736" roughness={0.95} metalness={0.05} flatShading />
     </mesh>
   );
@@ -83,7 +83,7 @@ function terminusZ(extent: number) {
 function Glacier({ extent }: { extent: number }) {
   const ref = useRef<THREE.Mesh>(null);
   const geo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(1, 1, 46, 150);
+    const g = new THREE.PlaneGeometry(1, 1, 40, 110);
     g.rotateX(-Math.PI / 2);
     return g;
   }, []);
@@ -136,7 +136,7 @@ function Glacier({ extent }: { extent: number }) {
 
   return (
     <group position={[0, 0, -30]}>
-      <mesh ref={ref} geometry={geo} material={material} castShadow receiveShadow />
+      <mesh ref={ref} geometry={geo} material={material} />
       <mesh geometry={geo}>
         <meshBasicMaterial color={GLACIER} wireframe transparent opacity={0.06} />
       </mesh>
@@ -161,7 +161,7 @@ function riverCurve(extent: number) {
 
 function River({ extent }: { extent: number }) {
   const curve = useMemo(() => riverCurve(extent), [extent]);
-  const tube = useMemo(() => new THREE.TubeGeometry(curve, 160, 0.75, 10, false), [curve]);
+  const tube = useMemo(() => new THREE.TubeGeometry(curve, 90, 0.75, 8, false), [curve]);
   const sprite = useMemo(() => makeGlowTexture(MELT), []);
   const count = 220;
   const pointsRef = useRef<THREE.Points>(null);
@@ -392,7 +392,7 @@ function IceCore({ visible, layer }: { visible: boolean; layer: number }) {
 
   return (
     <group ref={group} position={[19, 8, 10]} rotation-z={0.07} scale={0.001}>
-      <mesh castShadow>
+      <mesh>
         <cylinderGeometry args={[1.5, 1.5, 15, 40, 1, false]} />
         <meshStandardMaterial map={tex} roughness={0.22} metalness={0.05} transparent opacity={0.96} />
       </mesh>
@@ -445,7 +445,7 @@ function Settlement({ stop }: { stop: number }) {
     <group>
       {cabins.map((c, i) => (
         <group key={i} position={[c.x, -1.2, c.z]} scale={c.s}>
-          <mesh castShadow position={[0, 0.7, 0]}>
+          <mesh position={[0, 0.7, 0]}>
             <boxGeometry args={[1.6, 1.4, 1.4]} />
             <meshStandardMaterial color="#0e2130" roughness={0.9} />
           </mesh>
@@ -524,7 +524,7 @@ export function GlacierWorld() {
 
   const extentTarget = TIMELINE[timeIndex]?.extent ?? 0.72;
   const stepped = Math.round(extentTarget * 100) / 100;
-  const snowCount = quality === "low" ? 260 : quality === "medium" ? 700 : 1400;
+  const snowCount = quality === "low" ? 220 : quality === "medium" ? 500 : 900;
 
   return (
     <>
@@ -533,14 +533,8 @@ export function GlacierWorld() {
 
       <ambientLight intensity={0.55} color="#8DE7F5" />
       <hemisphereLight args={["#8DE7F5", "#07131F", 0.5]} />
-      <directionalLight
-        position={[-60, 70, -40]}
-        intensity={2.4}
-        color="#dff4ff"
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-      />
+      <directionalLight position={[-60, 70, -40]} intensity={2.4} color="#dff4ff" />
+      <directionalLight position={[40, 30, 60]} intensity={0.5} color="#8DE7F5" />
       <Environment>
         <Lightformer intensity={1.6} color="#8DE7F5" position={[0, 30, -60]} scale={[60, 30, 1]} />
         <Lightformer
