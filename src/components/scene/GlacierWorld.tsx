@@ -174,7 +174,7 @@ function River({ extent }: { extent: number }) {
   useFrame((state, delta) => {
     const pts = pointsRef.current;
     if (!pts) return;
-    const attr = pts.geometry.attributes.position as THREE.BufferAttribute;
+    const attr = pts.geometry.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < count; i++) {
       offsets[i] = (offsets[i]! + delta * 0.05) % 1;
       const p = curve.getPointAt(offsets[i]!);
@@ -253,7 +253,7 @@ function Snow({ count }: { count: number }) {
   useFrame((state, delta) => {
     const pts = ref.current;
     if (!pts) return;
-    const attr = pts.geometry.attributes.position as THREE.BufferAttribute;
+    const attr = pts.geometry.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < count; i++) {
       let y = attr.getY(i) - delta * (1.2 + (i % 5) * 0.35);
       if (y < -2) y = 60;
