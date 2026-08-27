@@ -495,18 +495,17 @@ const CAM: Record<number, { pos: [number, number, number]; look: [number, number
 function Rig({ act }: { act: number }) {
   const { camera } = useThree();
   const look = useRef(new THREE.Vector3(0, 10, -30));
+  const started = useRef(false);
   useFrame((state, delta) => {
     const target = CAM[act] ?? CAM[0]!;
-    const k = 1 - Math.exp(-1.1 * Math.min(delta, 0.05) * 3);
+    const k = started.current ? 1 - Math.exp(-1.6 * Math.min(delta, 0.25)) : 1;
+    started.current = true;
     const drift = new THREE.Vector3(
       state.pointer.x * 2.6,
       state.pointer.y * 1.4,
       0,
     );
-    camera.position.lerp(
-      new THREE.Vector3(...target.pos).add(drift),
-      k,
-    );
+    camera.position.lerp(new THREE.Vector3(...target.pos).add(drift), k);
     look.current.lerp(new THREE.Vector3(...target.look), k);
     camera.lookAt(look.current);
   });
