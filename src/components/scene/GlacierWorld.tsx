@@ -69,7 +69,7 @@ function Terrain() {
 
   return (
     <mesh geometry={geo} position={[0, 0, -30]}>
-      <meshStandardMaterial color="#122736" roughness={0.95} metalness={0.05} flatShading />
+      <meshStandardMaterial color="#1d3b4d" roughness={0.95} metalness={0.05} flatShading />
     </mesh>
   );
 }
@@ -123,7 +123,8 @@ function Glacier({ extent }: { extent: number }) {
         const flow = Math.sin(v * 26 + u * 5) * 0.35 + fbm(x * 0.12, z * 0.09) * 1.6;
         const slope = (1 - v) * (10 + e * 6);
         const snout = v > 0.93 ? -(v - 0.93) * 55 : 0;
-        pos.setXYZ(i, x, -1.5 + crown + flow + slope + snout, z);
+        const edgeDrop = Math.pow(Math.abs(u - 0.5) * 2, 3) * (5 + e * 3);
+        pos.setXYZ(i, x, -1.5 + crown + flow + slope + snout - edgeDrop, z);
       }
       pos.needsUpdate = true;
       geo.computeVertexNormals();
@@ -483,12 +484,12 @@ function Settlement({ stop }: { stop: number }) {
 /* ---------------------------------------------- camera */
 
 const CAM: Record<number, { pos: [number, number, number]; look: [number, number, number] }> = {
-  0: { pos: [0, 24, 118], look: [0, 10, -40] },
+  0: { pos: [0, 17, 74], look: [0, 6, -34] },
   1: { pos: [19, 10, 32], look: [19, 7, 10] },
   2: { pos: [4, 58, 92], look: [0, 0, -30] },
   3: { pos: [-24, 12, 58], look: [6, -1, 74] },
-  4: { pos: [0, 34, 116], look: [0, 6, -24] },
-  5: { pos: [0, 22, 150], look: [0, 16, -60] },
+  4: { pos: [0, 26, 94], look: [0, 4, -26] },
+  5: { pos: [0, 20, 110], look: [0, 12, -50] },
 };
 
 function Rig({ act }: { act: number }) {
