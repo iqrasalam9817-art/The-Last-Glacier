@@ -57,7 +57,7 @@ function Terrain() {
   const geo = useMemo(() => {
     const g = new THREE.PlaneGeometry(220, 260, 150, 170);
     g.rotateX(-Math.PI / 2);
-    const pos = g.attributes.position as THREE.BufferAttribute;
+    const pos = g.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const z = pos.getZ(i);
@@ -111,7 +111,7 @@ function Glacier({ extent }: { extent: number }) {
       const head = -70;
       const tail = terminusZ(e);
       const len = tail - head;
-      const pos = geo.attributes.position as THREE.BufferAttribute;
+      const pos = geo.attributes['position'] as THREE.BufferAttribute;
       for (let i = 0; i < pos.count; i++) {
         const u = pos.getX(i) + 0.5; // 0..1 across
         const v = pos.getZ(i) + 0.5; // 0..1 along
