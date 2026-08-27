@@ -44,8 +44,8 @@ function fbm(x: number, z: number) {
 
 /** U-shaped valley running along Z, rising toward the head (-Z). */
 function terrainHeight(x: number, z: number) {
-  const walls = Math.min(26, Math.pow(Math.abs(x) / 5.2, 2.2));
-  const headRise = Math.max(0, (-z - 10) * 0.22);
+  const walls = Math.min(34, Math.pow(Math.max(0, Math.abs(x) - 14) / 4.6, 2.1));
+  const headRise = Math.min(16, Math.max(0, (-z - 20) * 0.14));
   const ridges = fbm(x * 0.055 + 10, z * 0.045 + 4) * (6 + walls * 0.55);
   const floor = -1.2 + Math.sin(z * 0.05) * 0.6;
   return floor + walls + headRise + ridges;
@@ -55,9 +55,9 @@ function terrainHeight(x: number, z: number) {
 
 function Terrain() {
   const geo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(220, 260, 150, 170);
+    const g = new THREE.PlaneGeometry(220, 260, 96, 110);
     g.rotateX(-Math.PI / 2);
-    const pos = g.attributes.position as THREE.BufferAttribute;
+    const pos = g.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const z = pos.getZ(i);
@@ -68,8 +68,8 @@ function Terrain() {
   }, []);
 
   return (
-    <mesh geometry={geo} receiveShadow position={[0, 0, -30]}>
-      <meshStandardMaterial color="#122736" roughness={0.95} metalness={0.05} flatShading />
+    <mesh geometry={geo} position={[0, 0, -30]}>
+      <meshStandardMaterial color="#1d3b4d" roughness={0.95} metalness={0.05} flatShading />
     </mesh>
   );
 }
@@ -83,7 +83,7 @@ function terminusZ(extent: number) {
 function Glacier({ extent }: { extent: number }) {
   const ref = useRef<THREE.Mesh>(null);
   const geo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(1, 1, 46, 150);
+    const g = new THREE.PlaneGeometry(1, 1, 40, 110);
     g.rotateX(-Math.PI / 2);
     return g;
   }, []);
@@ -111,19 +111,20 @@ function Glacier({ extent }: { extent: number }) {
       const head = -70;
       const tail = terminusZ(e);
       const len = tail - head;
-      const pos = geo.attributes.position as THREE.BufferAttribute;
+      const pos = geo.attributes['position'] as THREE.BufferAttribute;
       for (let i = 0; i < pos.count; i++) {
         const u = pos.getX(i) + 0.5; // 0..1 across
         const v = pos.getZ(i) + 0.5; // 0..1 along
         const z = head + v * len;
         const taper = 0.55 + 0.45 * Math.pow(1 - v, 0.6);
-        const width = (10 + e * 9) * taper;
+        const width = (13 + e * 8) * taper;
         const x = (u - 0.5) * 2 * width;
         const crown = Math.cos((u - 0.5) * Math.PI) * (2.4 + e * 2.2);
         const flow = Math.sin(v * 26 + u * 5) * 0.35 + fbm(x * 0.12, z * 0.09) * 1.6;
         const slope = (1 - v) * (10 + e * 6);
         const snout = v > 0.93 ? -(v - 0.93) * 55 : 0;
-        pos.setXYZ(i, x, -1.5 + crown + flow + slope + snout, z);
+        const edgeDrop = Math.pow(Math.abs(u - 0.5) * 2, 3) * (5 + e * 3);
+        pos.setXYZ(i, x, -1.5 + crown + flow + slope + snout - edgeDrop, z);
       }
       pos.needsUpdate = true;
       geo.computeVertexNormals();
@@ -136,7 +137,7 @@ function Glacier({ extent }: { extent: number }) {
 
   return (
     <group position={[0, 0, -30]}>
-      <mesh ref={ref} geometry={geo} material={material} castShadow receiveShadow />
+      <mesh ref={ref} geometry={geo} material={material} />
       <mesh geometry={geo}>
         <meshBasicMaterial color={GLACIER} wireframe transparent opacity={0.06} />
       </mesh>
@@ -161,7 +162,7 @@ function riverCurve(extent: number) {
 
 function River({ extent }: { extent: number }) {
   const curve = useMemo(() => riverCurve(extent), [extent]);
-  const tube = useMemo(() => new THREE.TubeGeometry(curve, 160, 0.75, 10, false), [curve]);
+  const tube = useMemo(() => new THREE.TubeGeometry(curve, 90, 0.75, 8, false), [curve]);
   const sprite = useMemo(() => makeGlowTexture(MELT), []);
   const count = 220;
   const pointsRef = useRef<THREE.Points>(null);
@@ -174,7 +175,7 @@ function River({ extent }: { extent: number }) {
   useFrame((state, delta) => {
     const pts = pointsRef.current;
     if (!pts) return;
-    const attr = pts.geometry.attributes.position as THREE.BufferAttribute;
+    const attr = pts.geometry.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < count; i++) {
       offsets[i] = (offsets[i]! + delta * 0.05) % 1;
       const p = curve.getPointAt(offsets[i]!);
@@ -253,7 +254,7 @@ function Snow({ count }: { count: number }) {
   useFrame((state, delta) => {
     const pts = ref.current;
     if (!pts) return;
-    const attr = pts.geometry.attributes.position as THREE.BufferAttribute;
+    const attr = pts.geometry.attributes['position'] as THREE.BufferAttribute;
     for (let i = 0; i < count; i++) {
       let y = attr.getY(i) - delta * (1.2 + (i % 5) * 0.35);
       if (y < -2) y = 60;
@@ -392,7 +393,7 @@ function IceCore({ visible, layer }: { visible: boolean; layer: number }) {
 
   return (
     <group ref={group} position={[19, 8, 10]} rotation-z={0.07} scale={0.001}>
-      <mesh castShadow>
+      <mesh>
         <cylinderGeometry args={[1.5, 1.5, 15, 40, 1, false]} />
         <meshStandardMaterial map={tex} roughness={0.22} metalness={0.05} transparent opacity={0.96} />
       </mesh>
@@ -445,7 +446,7 @@ function Settlement({ stop }: { stop: number }) {
     <group>
       {cabins.map((c, i) => (
         <group key={i} position={[c.x, -1.2, c.z]} scale={c.s}>
-          <mesh castShadow position={[0, 0.7, 0]}>
+          <mesh position={[0, 0.7, 0]}>
             <boxGeometry args={[1.6, 1.4, 1.4]} />
             <meshStandardMaterial color="#0e2130" roughness={0.9} />
           </mesh>
@@ -483,29 +484,28 @@ function Settlement({ stop }: { stop: number }) {
 /* ---------------------------------------------- camera */
 
 const CAM: Record<number, { pos: [number, number, number]; look: [number, number, number] }> = {
-  0: { pos: [0, 13, 78], look: [0, 10, -30] },
+  0: { pos: [0, 17, 74], look: [0, 6, -34] },
   1: { pos: [19, 10, 32], look: [19, 7, 10] },
-  2: { pos: [2, 40, 60], look: [0, 2, -18] },
-  3: { pos: [-14, 8, 46], look: [6, -1, 62] },
-  4: { pos: [0, 26, 74], look: [0, 4, -6] },
-  5: { pos: [0, 16, 96], look: [0, 14, -40] },
+  2: { pos: [4, 58, 92], look: [0, 0, -30] },
+  3: { pos: [-24, 12, 58], look: [6, -1, 74] },
+  4: { pos: [0, 26, 94], look: [0, 4, -26] },
+  5: { pos: [0, 20, 110], look: [0, 12, -50] },
 };
 
 function Rig({ act }: { act: number }) {
   const { camera } = useThree();
   const look = useRef(new THREE.Vector3(0, 10, -30));
+  const started = useRef(false);
   useFrame((state, delta) => {
     const target = CAM[act] ?? CAM[0]!;
-    const k = 1 - Math.exp(-1.1 * Math.min(delta, 0.05) * 3);
+    const k = started.current ? 1 - Math.exp(-1.6 * Math.min(delta, 0.25)) : 1;
+    started.current = true;
     const drift = new THREE.Vector3(
       state.pointer.x * 2.6,
       state.pointer.y * 1.4,
       0,
     );
-    camera.position.lerp(
-      new THREE.Vector3(...target.pos).add(drift),
-      k,
-    );
+    camera.position.lerp(new THREE.Vector3(...target.pos).add(drift), k);
     look.current.lerp(new THREE.Vector3(...target.look), k);
     camera.lookAt(look.current);
   });
@@ -524,23 +524,17 @@ export function GlacierWorld() {
 
   const extentTarget = TIMELINE[timeIndex]?.extent ?? 0.72;
   const stepped = Math.round(extentTarget * 100) / 100;
-  const snowCount = quality === "low" ? 260 : quality === "medium" ? 700 : 1400;
+  const snowCount = quality === "low" ? 220 : quality === "medium" ? 500 : 900;
 
   return (
     <>
       <color attach="background" args={["#07131F"]} />
-      <fog attach="fog" args={["#07131F", 70, 250]} />
+      <fog attach="fog" args={["#07131F", 130, 430]} />
 
-      <ambientLight intensity={0.35} color="#8DE7F5" />
+      <ambientLight intensity={0.55} color="#8DE7F5" />
       <hemisphereLight args={["#8DE7F5", "#07131F", 0.5]} />
-      <directionalLight
-        position={[-60, 70, -40]}
-        intensity={1.6}
-        color="#dff4ff"
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-      />
+      <directionalLight position={[-60, 70, -40]} intensity={2.4} color="#dff4ff" />
+      <directionalLight position={[40, 30, 60]} intensity={0.5} color="#8DE7F5" />
       <Environment>
         <Lightformer intensity={1.6} color="#8DE7F5" position={[0, 30, -60]} scale={[60, 30, 1]} />
         <Lightformer

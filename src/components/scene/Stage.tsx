@@ -30,9 +30,8 @@ export function Stage({ onFallback }: { onFallback: (v: boolean) => void }) {
 
   return (
     <Canvas
-      shadows
       frameloop={calm ? "demand" : "always"}
-      dpr={[1, 1.8]}
+      dpr={[1, 1.6]}
       gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ position: [0, 13, 78], fov: 52, near: 0.1, far: 600 }}
     >
