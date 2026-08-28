@@ -69,7 +69,7 @@ function Terrain() {
 
   return (
     <mesh geometry={geo} position={[0, 0, -30]}>
-      <meshStandardMaterial color="#1d3b4d" roughness={0.95} metalness={0.05} flatShading />
+      <meshStandardMaterial color="#24455a" roughness={0.95} metalness={0.05} flatShading />
     </mesh>
   );
 }
@@ -77,7 +77,7 @@ function Terrain() {
 /* ---------------------------------------------- glacier */
 
 function terminusZ(extent: number) {
-  return -70 + extent * 118;
+  return -70 + extent * 165;
 }
 
 function Glacier({ extent }: { extent: number }) {
@@ -91,7 +91,7 @@ function Glacier({ extent }: { extent: number }) {
   const material = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#bfeefb",
+        color: "#ff00aa",
         emissive: new THREE.Color(GLACIER),
         emissiveIntensity: 0.22,
         roughness: 0.18,
@@ -117,13 +117,13 @@ function Glacier({ extent }: { extent: number }) {
         const v = pos.getZ(i) + 0.5; // 0..1 along
         const z = head + v * len;
         const taper = 0.55 + 0.45 * Math.pow(1 - v, 0.6);
-        const width = (13 + e * 8) * taper;
+        const width = (24 + e * 12) * taper;
         const x = (u - 0.5) * 2 * width;
-        const crown = Math.cos((u - 0.5) * Math.PI) * (2.4 + e * 2.2);
+        const crown = Math.cos((u - 0.5) * Math.PI) * (4.5 + e * 4);
         const flow = Math.sin(v * 26 + u * 5) * 0.35 + fbm(x * 0.12, z * 0.09) * 1.6;
-        const slope = (1 - v) * (10 + e * 6);
-        const snout = v > 0.93 ? -(v - 0.93) * 55 : 0;
-        const edgeDrop = Math.pow(Math.abs(u - 0.5) * 2, 3) * (5 + e * 3);
+        const slope = (1 - v) * (18 + e * 10);
+        const snout = v > 0.93 ? -(v - 0.93) * 38 : 0;
+        const edgeDrop = Math.pow(Math.abs(u - 0.5) * 2, 3) * (8 + e * 4);
         pos.setXYZ(i, x, -1.5 + crown + flow + slope + snout - edgeDrop, z);
       }
       pos.needsUpdate = true;
@@ -484,7 +484,7 @@ function Settlement({ stop }: { stop: number }) {
 /* ---------------------------------------------- camera */
 
 const CAM: Record<number, { pos: [number, number, number]; look: [number, number, number] }> = {
-  0: { pos: [0, 17, 74], look: [0, 6, -34] },
+  0: { pos: [0, 10, 62], look: [0, 8, -50] },
   1: { pos: [19, 10, 32], look: [19, 7, 10] },
   2: { pos: [4, 58, 92], look: [0, 0, -30] },
   3: { pos: [-24, 12, 58], look: [6, -1, 74] },
@@ -534,7 +534,7 @@ export function GlacierWorld() {
       <ambientLight intensity={0.55} color="#8DE7F5" />
       <hemisphereLight args={["#8DE7F5", "#07131F", 0.5]} />
       <directionalLight position={[-60, 70, -40]} intensity={2.4} color="#dff4ff" />
-      <directionalLight position={[40, 30, 60]} intensity={0.5} color="#8DE7F5" />
+      <directionalLight position={[40, 30, 60]} intensity={0.9} color="#8DE7F5" />
       <Environment>
         <Lightformer intensity={1.6} color="#8DE7F5" position={[0, 30, -60]} scale={[60, 30, 1]} />
         <Lightformer
