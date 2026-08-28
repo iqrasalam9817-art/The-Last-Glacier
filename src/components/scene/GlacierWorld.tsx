@@ -130,6 +130,9 @@ function Glacier({ extent }: { extent: number }) {
       geo.computeVertexNormals();
     }
     if (ref.current) {
+      geo.computeBoundingBox();
+      (window as any).__gbox = geo.boundingBox?.toArray?.() ?? geo.boundingBox;
+      (window as any).__gvis = ref.current.visible;
       const t = state.clock.elapsedTime;
       material.emissiveIntensity = 0.2 + Math.sin(t * 0.5) * 0.05;
     }
@@ -508,6 +511,7 @@ function Rig({ act }: { act: number }) {
     camera.position.lerp(new THREE.Vector3(...target.pos).add(drift), k);
     look.current.lerp(new THREE.Vector3(...target.look), k);
     camera.lookAt(look.current);
+    (window as any).__cam = camera.position.toArray();
   });
   return null;
 }
