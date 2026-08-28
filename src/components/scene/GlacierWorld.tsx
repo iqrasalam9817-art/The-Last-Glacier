@@ -77,7 +77,7 @@ function Terrain() {
 /* ---------------------------------------------- glacier */
 
 function terminusZ(extent: number) {
-  return -70 + extent * 165;
+  return -70 + extent * 140;
 }
 
 function Glacier({ extent }: { extent: number }) {
@@ -130,9 +130,6 @@ function Glacier({ extent }: { extent: number }) {
       geo.computeVertexNormals();
     }
     if (ref.current) {
-      geo.computeBoundingBox();
-      (window as any).__gbox = geo.boundingBox?.toArray?.() ?? geo.boundingBox;
-      (window as any).__gvis = ref.current.visible;
       const t = state.clock.elapsedTime;
       material.emissiveIntensity = 0.2 + Math.sin(t * 0.5) * 0.05;
     }
@@ -487,12 +484,12 @@ function Settlement({ stop }: { stop: number }) {
 /* ---------------------------------------------- camera */
 
 const CAM: Record<number, { pos: [number, number, number]; look: [number, number, number] }> = {
-  0: { pos: [0, 10, 62], look: [0, 8, -50] },
+  0: { pos: [0, 18, 104], look: [0, 6, -44] },
   1: { pos: [19, 10, 32], look: [19, 7, 10] },
-  2: { pos: [4, 58, 92], look: [0, 0, -30] },
+  2: { pos: [4, 70, 112], look: [0, 0, -34] },
   3: { pos: [-24, 12, 58], look: [6, -1, 74] },
-  4: { pos: [0, 26, 94], look: [0, 4, -26] },
-  5: { pos: [0, 20, 110], look: [0, 12, -50] },
+  4: { pos: [0, 30, 118], look: [0, 4, -30] },
+  5: { pos: [0, 24, 132], look: [0, 12, -52] },
 };
 
 function Rig({ act }: { act: number }) {
@@ -511,7 +508,6 @@ function Rig({ act }: { act: number }) {
     camera.position.lerp(new THREE.Vector3(...target.pos).add(drift), k);
     look.current.lerp(new THREE.Vector3(...target.look), k);
     camera.lookAt(look.current);
-    (window as any).__cam = camera.position.toArray();
   });
   return null;
 }
