@@ -91,9 +91,9 @@ function Glacier({ extent }: { extent: number }) {
   const material = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#ff00aa",
+        color: "#d7f4ff",
         emissive: new THREE.Color(GLACIER),
-        emissiveIntensity: 0.22,
+        emissiveIntensity: 0.34,
         roughness: 0.18,
         metalness: 0.02,
         transparent: true,
