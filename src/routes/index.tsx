@@ -139,14 +139,19 @@ function Journey() {
         {/* Hero */}
         <section className="flex min-h-screen items-center px-6 py-32 sm:px-10">
           <div className="max-w-2xl">
-            <p className="rise text-[11px] uppercase tracking-[0.4em] text-mist">
+            <p className="rise eyebrow-drift text-glow-soft text-[11px] uppercase tracking-[0.4em] text-mist">
               An interactive climate story
             </p>
-            <h1
-              className="rise mt-6 font-display text-6xl leading-[0.95] text-frost sm:text-8xl"
-              style={{ animationDelay: "150ms" }}
-            >
-              The Last <em className="text-glacier">Glacier</em>
+            <h1 className="text-3d-stage text-3d mt-6 font-display text-6xl leading-[0.95] text-frost sm:text-8xl">
+              <AnimatedText text="The Last" delay={150} depth={false} />{" "}
+              <em className="not-italic">
+                <AnimatedText
+                  text="Glacier"
+                  className="text-shimmer font-display italic"
+                  delay={480}
+                  depth={false}
+                />
+              </em>
             </h1>
             <p
               className="rise mt-7 max-w-md text-base leading-relaxed text-mist"
