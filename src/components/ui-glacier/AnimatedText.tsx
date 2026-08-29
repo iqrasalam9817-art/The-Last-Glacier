@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 function useInView<T extends HTMLElement>() {
   const ref = useRef<T | null>(null);
@@ -34,7 +34,7 @@ export function AnimatedText({
   depth = true,
 }: {
   text: string;
-  as?: ElementType;
+  as?: "span" | "p" | "h1" | "h2" | "h3" | "div";
   className?: string;
   delay?: number;
   stagger?: number;
