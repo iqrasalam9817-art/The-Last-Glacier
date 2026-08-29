@@ -254,11 +254,21 @@ function Journey() {
         >
           <div className="max-w-2xl space-y-8">
             <Eyebrow>{ACTS[5]!.eyebrow}</Eyebrow>
-            <p className="font-display text-4xl leading-tight text-frost sm:text-6xl">
-              If the ice remembers everything,{" "}
-              <em className="text-glacier">what would you want it to remember about now?</em>
+            <p className="text-3d-stage text-3d font-display text-4xl leading-tight text-frost sm:text-6xl">
+              <AnimatedText text="If the ice remembers everything," depth={false} />{" "}
+              <em className="not-italic">
+                <AnimatedText
+                  text="what would you want it to remember about now?"
+                  className="text-shimmer font-display italic"
+                  delay={420}
+                  stagger={18}
+                  depth={false}
+                />
+              </em>
             </p>
-            <p className="text-sm leading-relaxed text-mist">{ACTS[5]!.body}</p>
+            <RevealBlock delay={120}>
+              <p className="text-sm leading-relaxed text-mist">{ACTS[5]!.body}</p>
+            </RevealBlock>
             <div className="flex flex-wrap justify-center gap-3">
               <Link
                 to="/explore"
