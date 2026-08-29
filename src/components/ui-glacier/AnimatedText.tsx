@@ -43,9 +43,10 @@ export function AnimatedText({
   const { ref, seen } = useInView<HTMLElement>();
   const words = text.split(" ");
   let index = -1;
+  const Comp = Tag as React.ElementType<Record<string, unknown>>;
 
   return (
-    <Tag
+    <Comp
       ref={ref}
       className={`text-3d-stage ${depth ? "text-3d" : ""} ${className}`}
       data-revealed={seen ? "true" : "false"}
