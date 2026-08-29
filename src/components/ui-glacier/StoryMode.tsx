@@ -2,27 +2,46 @@ import { Link } from "@tanstack/react-router";
 import { ACTS, CORE_LAYERS, RIVER_STOPS, TIMELINE } from "@/content/glacier";
 import { Eyebrow, FrostedPanel, ProvenanceTag } from "./Panel";
 import { FutureConsole, TimeScrubber } from "./Controls";
+import { AnimatedText, RevealBlock } from "./AnimatedText";
 
 /** Complete 2D narrative for devices without WebGL or visitors who prefer no 3D. */
 export function StoryMode() {
   return (
     <main className="relative mx-auto max-w-3xl px-6 py-32 sm:px-10">
       <Eyebrow>2D Story Mode</Eyebrow>
-      <h1 className="mt-5 font-display text-5xl leading-[0.98] text-frost sm:text-7xl">
-        The Last <em className="text-glacier">Glacier</em>
+      <h1 className="text-3d-stage text-3d mt-5 font-display text-5xl leading-[0.98] text-frost sm:text-7xl">
+        <AnimatedText text="The Last" depth={false} />{" "}
+        <em className="not-italic">
+          <AnimatedText
+            text="Glacier"
+            className="text-shimmer font-display italic"
+            delay={380}
+            depth={false}
+          />
+        </em>
       </h1>
-      <p className="mt-6 max-w-xl text-sm leading-relaxed text-mist">
-        Your device is running the full narrative without the 3D environment. Nothing in the
-        story, the timeline, the data, or the future card is missing here.
-      </p>
+      <RevealBlock delay={100}>
+        <p className="mt-6 max-w-xl text-sm leading-relaxed text-mist">
+          Your device is running the full narrative without the 3D environment. Nothing in the
+          story, the timeline, the data, or the future card is missing here.
+        </p>
+      </RevealBlock>
 
       <div className="mt-16 space-y-16">
         {ACTS.map((act) => (
           <article key={act.id} id={act.id} className="space-y-4">
             <Eyebrow>{act.eyebrow}</Eyebrow>
-            <h2 className="font-display text-3xl text-frost">{act.title}</h2>
-            <p className="font-display text-xl text-glacier">{act.statement}</p>
-            <p className="text-sm leading-relaxed text-mist">{act.body}</p>
+            <AnimatedText
+              as="h2"
+              text={act.title}
+              className="font-display text-3xl text-frost"
+            />
+            <p className="text-3d-stage text-3d font-display text-xl text-glacier">
+              {act.statement}
+            </p>
+            <RevealBlock delay={100}>
+              <p className="text-sm leading-relaxed text-mist">{act.body}</p>
+            </RevealBlock>
 
             {act.id === "ice-core" && (
               <FrostedPanel className="mt-4">

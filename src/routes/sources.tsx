@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GlacierNav } from "@/components/ui-glacier/GlacierNav";
 import { Eyebrow, FrostedPanel, ProvenanceTag } from "@/components/ui-glacier/Panel";
+import { AnimatedText, RevealBlock } from "@/components/ui-glacier/AnimatedText";
 import { SOURCES } from "@/content/glacier";
 
 export const Route = createFileRoute("/sources")({
@@ -31,13 +32,17 @@ function Sources() {
       <GlacierNav />
       <main className="mx-auto max-w-3xl px-6 py-32 sm:px-10">
         <Eyebrow>Sources & method</Eyebrow>
-        <h1 className="mt-5 font-display text-5xl leading-tight text-frost sm:text-6xl">
-          What is measured, and what is written
-        </h1>
-        <p className="mt-6 text-sm leading-relaxed text-mist">
-          The journey is poetic; this page is precise. Every number on screen carries one of
-          four labels so you always know what you are looking at.
-        </p>
+        <AnimatedText
+          as="h1"
+          text="What is measured, and what is written"
+          className="mt-5 block font-display text-5xl leading-tight text-frost sm:text-6xl"
+        />
+        <RevealBlock delay={100}>
+          <p className="mt-6 text-sm leading-relaxed text-mist">
+            The journey is poetic; this page is precise. Every number on screen carries one of
+            four labels so you always know what you are looking at.
+          </p>
+        </RevealBlock>
 
         <div className="mt-10 flex flex-wrap gap-2">
           <ProvenanceTag value="OBSERVED" />

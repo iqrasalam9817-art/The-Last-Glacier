@@ -13,6 +13,7 @@ import {
   TimeScrubber,
 } from "@/components/ui-glacier/Controls";
 import { StoryMode } from "@/components/ui-glacier/StoryMode";
+import { AnimatedText, RevealBlock } from "@/components/ui-glacier/AnimatedText";
 
 const Stage = lazy(() =>
   import("@/components/scene/Stage").then((m) => ({ default: m.Stage })),
@@ -92,11 +93,15 @@ function Act({
     >
       <div className="w-full max-w-xl space-y-6">
         <Eyebrow>{act.eyebrow}</Eyebrow>
-        <h2 className="font-display text-4xl leading-[1.05] text-frost sm:text-5xl">
-          {act.title}
-        </h2>
+        <AnimatedText
+          as="h2"
+          text={act.title}
+          className="font-display text-4xl leading-[1.05] text-frost sm:text-5xl"
+        />
         <Statement>{act.statement}</Statement>
-        <p className="max-w-lg text-sm leading-relaxed text-mist">{act.body}</p>
+        <RevealBlock delay={120}>
+          <p className="max-w-lg text-sm leading-relaxed text-mist">{act.body}</p>
+        </RevealBlock>
         {children}
       </div>
     </section>
@@ -134,14 +139,19 @@ function Journey() {
         {/* Hero */}
         <section className="flex min-h-screen items-center px-6 py-32 sm:px-10">
           <div className="max-w-2xl">
-            <p className="rise text-[11px] uppercase tracking-[0.4em] text-mist">
+            <p className="rise eyebrow-drift text-glow-soft text-[11px] uppercase tracking-[0.4em] text-mist">
               An interactive climate story
             </p>
-            <h1
-              className="rise mt-6 font-display text-6xl leading-[0.95] text-frost sm:text-8xl"
-              style={{ animationDelay: "150ms" }}
-            >
-              The Last <em className="text-glacier">Glacier</em>
+            <h1 className="text-3d-stage text-3d mt-6 font-display text-6xl leading-[0.95] text-frost sm:text-8xl">
+              <AnimatedText text="The Last" delay={150} depth={false} />{" "}
+              <em className="not-italic">
+                <AnimatedText
+                  text="Glacier"
+                  className="text-shimmer font-display italic"
+                  delay={480}
+                  depth={false}
+                />
+              </em>
             </h1>
             <p
               className="rise mt-7 max-w-md text-base leading-relaxed text-mist"
@@ -221,10 +231,14 @@ function Journey() {
           <div className="mx-auto max-w-6xl space-y-8">
             <div className="max-w-xl space-y-5">
               <Eyebrow>{ACTS[4]!.eyebrow}</Eyebrow>
-              <h2 className="font-display text-4xl leading-tight text-frost sm:text-5xl">
-                {ACTS[4]!.title}
-              </h2>
-              <p className="text-sm leading-relaxed text-mist">{ACTS[4]!.body}</p>
+              <AnimatedText
+                as="h2"
+                text={ACTS[4]!.title}
+                className="font-display text-4xl leading-tight text-frost sm:text-5xl"
+              />
+              <RevealBlock delay={120}>
+                <p className="text-sm leading-relaxed text-mist">{ACTS[4]!.body}</p>
+              </RevealBlock>
             </div>
             <FutureConsole />
           </div>
@@ -240,11 +254,21 @@ function Journey() {
         >
           <div className="max-w-2xl space-y-8">
             <Eyebrow>{ACTS[5]!.eyebrow}</Eyebrow>
-            <p className="font-display text-4xl leading-tight text-frost sm:text-6xl">
-              If the ice remembers everything,{" "}
-              <em className="text-glacier">what would you want it to remember about now?</em>
+            <p className="text-3d-stage text-3d font-display text-4xl leading-tight text-frost sm:text-6xl">
+              <AnimatedText text="If the ice remembers everything," depth={false} />{" "}
+              <em className="not-italic">
+                <AnimatedText
+                  text="what would you want it to remember about now?"
+                  className="text-shimmer font-display italic"
+                  delay={420}
+                  stagger={18}
+                  depth={false}
+                />
+              </em>
             </p>
-            <p className="text-sm leading-relaxed text-mist">{ACTS[5]!.body}</p>
+            <RevealBlock delay={120}>
+              <p className="text-sm leading-relaxed text-mist">{ACTS[5]!.body}</p>
+            </RevealBlock>
             <div className="flex flex-wrap justify-center gap-3">
               <Link
                 to="/explore"

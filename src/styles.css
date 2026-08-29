@@ -164,12 +164,112 @@
   }
 }
 
+/* ---- Dimensional typography ------------------------------------------- */
+
+@utility text-3d-stage {
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+@utility text-3d {
+  text-shadow:
+    0 1px 0 oklch(0.876 0.088 208.3 / 0.35),
+    0 2px 0 oklch(0.773 0.112 206.9 / 0.22),
+    0 4px 10px oklch(0.182 0.03 249.2 / 0.75),
+    0 0 42px oklch(0.876 0.088 208.3 / 0.22);
+}
+
+@utility text-glow-soft {
+  text-shadow: 0 0 26px oklch(0.876 0.088 208.3 / 0.4);
+}
+
+.char-flip {
+  opacity: 0;
+  transform: translateY(0.5em) rotateX(-78deg);
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+}
+
+[data-revealed="true"] .char-flip {
+  animation: char-in 0.85s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes char-in {
+  0% {
+    opacity: 0;
+    transform: translateY(0.5em) rotateX(-78deg);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+.reveal-3d {
+  opacity: 0;
+  transform: perspective(900px) translateY(26px) rotateX(8deg);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-3d[data-revealed="true"] {
+  opacity: 1;
+  transform: perspective(900px) translateY(0) rotateX(0deg);
+}
+
+@utility text-shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--frost) 20%,
+    var(--glacier) 40%,
+    var(--mint) 52%,
+    var(--frost) 72%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-sweep 7s linear infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    background-position: 180% 0;
+  }
+  100% {
+    background-position: -80% 0;
+  }
+}
+
+@utility tilt-hover {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+@utility eyebrow-drift {
+  animation: drift 7s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .rise {
     animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .char-flip,
+  [data-revealed] .char-flip {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-3d {
     opacity: 1;
     transform: none;
   }
@@ -180,3 +280,4 @@
     transition-duration: 0.01ms !important;
   }
 }
+

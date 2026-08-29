@@ -36,7 +36,7 @@ export function GlacierNav() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-10">
         <Link to="/" className="group flex items-center gap-3">
           <span className="relative block h-4 w-4 rotate-45 border border-glacier/70 bg-glacier/20 shadow-[0_0_18px_rgba(141,231,245,0.6)]" />
-          <span className="font-display text-xl tracking-wide text-frost">
+          <span className="text-3d-stage text-3d font-display text-xl tracking-wide text-frost transition-transform duration-500 group-hover:[transform:perspective(600px)_rotateX(12deg)_translateY(-1px)]">
             The Last Glacier
           </span>
         </Link>

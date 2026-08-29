@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Provenance } from "@/content/glacier";
+import { RevealBlock } from "./AnimatedText";
 
 export function FrostedPanel({
   children,
@@ -32,15 +33,19 @@ export function ProvenanceTag({ value }: { value: Provenance }) {
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="text-[11px] uppercase tracking-[0.36em] text-mist">{children}</p>
+    <p className="eyebrow-drift text-glow-soft text-[11px] uppercase tracking-[0.36em] text-mist">
+      {children}
+    </p>
   );
 }
 
 export function Statement({ children }: { children: ReactNode }) {
   return (
-    <p className="font-display text-2xl leading-tight text-frost sm:text-3xl">
-      {children}
-    </p>
+    <RevealBlock>
+      <p className="text-3d-stage text-3d font-display text-2xl leading-tight text-frost sm:text-3xl">
+        {children}
+      </p>
+    </RevealBlock>
   );
 }
 
