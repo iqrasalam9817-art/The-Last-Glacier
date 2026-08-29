@@ -231,10 +231,14 @@ function Journey() {
           <div className="mx-auto max-w-6xl space-y-8">
             <div className="max-w-xl space-y-5">
               <Eyebrow>{ACTS[4]!.eyebrow}</Eyebrow>
-              <h2 className="font-display text-4xl leading-tight text-frost sm:text-5xl">
-                {ACTS[4]!.title}
-              </h2>
-              <p className="text-sm leading-relaxed text-mist">{ACTS[4]!.body}</p>
+              <AnimatedText
+                as="h2"
+                text={ACTS[4]!.title}
+                className="font-display text-4xl leading-tight text-frost sm:text-5xl"
+              />
+              <RevealBlock delay={120}>
+                <p className="text-sm leading-relaxed text-mist">{ACTS[4]!.body}</p>
+              </RevealBlock>
             </div>
             <FutureConsole />
           </div>
