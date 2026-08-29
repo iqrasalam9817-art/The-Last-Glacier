@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Provenance } from "@/content/glacier";
+import { RevealBlock } from "./AnimatedText";
 
 export function FrostedPanel({
   children,

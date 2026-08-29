@@ -13,6 +13,7 @@ import {
   TimeScrubber,
 } from "@/components/ui-glacier/Controls";
 import { StoryMode } from "@/components/ui-glacier/StoryMode";
+import { AnimatedText, RevealBlock } from "@/components/ui-glacier/AnimatedText";
 
 const Stage = lazy(() =>
   import("@/components/scene/Stage").then((m) => ({ default: m.Stage })),
@@ -92,11 +93,15 @@ function Act({
     >
       <div className="w-full max-w-xl space-y-6">
         <Eyebrow>{act.eyebrow}</Eyebrow>
-        <h2 className="font-display text-4xl leading-[1.05] text-frost sm:text-5xl">
-          {act.title}
-        </h2>
+        <AnimatedText
+          as="h2"
+          text={act.title}
+          className="font-display text-4xl leading-[1.05] text-frost sm:text-5xl"
+        />
         <Statement>{act.statement}</Statement>
-        <p className="max-w-lg text-sm leading-relaxed text-mist">{act.body}</p>
+        <RevealBlock delay={120}>
+          <p className="max-w-lg text-sm leading-relaxed text-mist">{act.body}</p>
+        </RevealBlock>
         {children}
       </div>
     </section>
