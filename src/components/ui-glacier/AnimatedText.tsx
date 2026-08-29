@@ -43,7 +43,7 @@ export function AnimatedText({
   const { ref, seen } = useInView<HTMLElement>();
   const words = text.split(" ");
   let index = -1;
-  const Comp = Tag as React.ElementType<Record<string, unknown>>;
+  const Comp = Tag as "span";
 
   return (
     <Comp
