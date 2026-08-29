@@ -68,7 +68,7 @@ export function AnimatedText({
           {w < words.length - 1 && <span className="inline-block">&nbsp;</span>}
         </span>
       ))}
-    </Tag>
+    </Comp>
   );
 }
 
